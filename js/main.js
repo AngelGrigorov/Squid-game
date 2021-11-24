@@ -14,7 +14,9 @@ scene.add( light );
 //global
 const start_position = 3;
 const end_position = -start_position;
-
+const text = document.querySelector(".text");
+const TIME_LIMIT = 10;
+let gameStat = "loading";
 function createCube(size, positionX, rotY = 0, color = 0xfbc851){
     const geometry = new THREE.BoxGeometry(size.w, size.h, size.d);
     const material = new THREE.MeshBasicMaterial( { color: color } );
@@ -97,9 +99,28 @@ class Player{
 const player = new Player()
 
 let doll = new Doll()
-setTimeout(() => {
-    doll.start()
-}, 1000);
+
+async function init(){
+    await delay(500)
+    text.innerText = "Starting in 3"
+    await delay(500)
+    text.innerText = "Starting in 2"
+    await delay(500)
+    text.innerText = "Starting in 1"
+    await delay(500)
+    text.innerText = "Go!!!"
+    startGame()
+}
+function startGame(){
+    gameStat = "started"
+        let progressBar = createCube({w:5, h: .1,d: 1}, 0)
+        progressBar.position.y = 3.35
+        gsap.to(progressBar.scale, {x: 0, duration: TIME_LIMIT, ease: "none"})
+        doll.start()
+    
+}
+init()
+
 
 function animate() {
 	renderer.render( scene, camera );
@@ -119,6 +140,10 @@ function onWindowResize(){
 }
 
 window.addEventListener('keydown', (e) => {
+    if(gameStat != "started"){
+        return
+    }
+
     if(e.key == "ArrowUp"){
         player.run()
     }

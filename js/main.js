@@ -69,12 +69,16 @@ class Player{
         this.player = sphere
         this.playerInfo = {
             positionX: start_position,
-            velocity: 0.1
+            velocity: 0
         }
     }
 
     run(){
         this.playerInfo.velocity = .03
+    }
+    stop(){
+        
+        gsap.to(this.playerInfo, {velocity: 0, duration: .1})
     }
     update(){
         this.playerInfo.positionX -= this.playerInfo.velocity
@@ -104,3 +108,15 @@ function onWindowResize(){
     camera.updateProjectMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
+
+window.addEventListener('keydown', (e) => {
+    if(e.key == "ArrowUp"){
+        player.run()
+    }
+});
+
+window.addEventListener('keyup', (e) => {
+    if(e.key == "ArrowUp"){
+        player.stop()
+    }
+});
